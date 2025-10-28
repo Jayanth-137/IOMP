@@ -1,0 +1,62 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        agri: {
+          50: "#f3fbf6",
+          100: "#e6f7ed",
+          200: "#bfeed2",
+          300: "#99e4b6",
+          400: "#4fd77f",
+          500: "#2fb86a",
+          600: "#269857",
+          700: "#1e6f3f",
+          800: "#164d2b",
+          900: "#0f2f18",
+        },
+        soil: {
+          50: "#f8f5f0",
+          100: "#f1e9dd",
+          200: "#e3d1ba",
+          300: "#d5b997",
+          400: "#c08b5a",
+          500: "#a76f3f",
+          600: "#8f5d34",
+          700: "#6b4526",
+          800: "#452f1a",
+          900: "#2b1b0f",
+        },
+        sun: {
+          50: "#fff9f0",
+          100: "#fff2df",
+          200: "#ffe3b8",
+          300: "#ffd48f",
+          400: "#ffc04a",
+          500: "#ffb020",
+          600: "#e69a00",
+          700: "#b26f00",
+          800: "#7f4a00",
+          900: "#4c2a00",
+        },
+      },
+      fontFamily: {
+        sans: [
+          "Inter",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica",
+          "Arial",
+          "Noto Sans",
+          "sans-serif",
+        ],
+        heading: ["Merriweather", "serif"],
+      },
+    },
+  },
+  plugins: [],
+};
