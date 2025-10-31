@@ -1,6 +1,6 @@
-project_identifier: "iomp"
+project_id: "842724"
 base_url: "https://api.crowdin.com"
-api_token: "${env:CROWDIN_API_TOKEN}"
+api_token: "a6f2d147188bbcae87591631c3a26aa2c686c18c251278beca32e84a706cbef62be8c7a57d50f539"
 
 files:
   - source: "client/src/locales/en/translation.json"

@@ -32,12 +32,25 @@ jobs:
         run: |
           crowdin download --configuration .crowdin.yml
 
-      - name: Commit translations
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure git
         run: |
           git config user.name "crowdin-bot"
           git config user.email "noreply@crowdin.com"
+
+      - name: Stage translation changes
+        run: |
           git add client/src/locales || true
           git commit -m "chore(i18n): update translations from Crowdin" || echo "No changes to commit"
-          git push origin HEAD:main || echo "Push failed or no permission"
+
+      - name: Create pull request with translations
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: translations/crowdin-${{ github.run_id }}
+          base: main
+          title: "chore(i18n): update translations from Crowdin"
+          body: |
+            This PR was created automatically by the Crowdin sync workflow.
+            It includes updated translation files under client/src/locales/.
+          labels: translations, i18n
+          skip-when-empty: true
