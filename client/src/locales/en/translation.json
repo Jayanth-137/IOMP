@@ -1,0 +1,20 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "signup": "Sign up"
+  },
+  "landing": {
+    "title": "Welcome to CropAssist",
+    "subtitle": "Crop insights and forecasts"
+  },
+  "login": {
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in"
+  },
+  "dashboard": {
+    "welcome": "Welcome to the dashboard"
+  }
+}
