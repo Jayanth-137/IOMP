@@ -3,6 +3,7 @@ import { DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 import { analysisService } from '../services/api';
 import Loader from '../components/Loader';
 import Toast from '../components/Toast';
+import { useTranslation } from 'react-i18next';
 
 const Profitability = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const Profitability = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [toast, setToast] = useState(null);
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     setFormData({
@@ -29,10 +31,10 @@ const Profitability = () => {
     try {
       const response = await analysisService.getProfitability(formData);
       setResult(response.data);
-      setToast({ message: 'Profitability analysis completed!', type: 'success' });
+      setToast({ message: t('profitability.success'), type: 'success' });
     } catch (error) {
       setToast({
-        message: error.response?.data?.message || 'Failed to analyze profitability. Please try again.',
+        message: error.response?.data?.message || t('profitability.failed'),
         type: 'error',
       });
     } finally {
@@ -49,10 +51,8 @@ const Profitability = () => {
           <div className="flex justify-center mb-4">
             <DollarSign className="h-12 w-12 text-yellow-600" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Profitability Analysis</h1>
-          <p className="text-gray-600">
-            Compare your crop choice with system recommendations to maximize returns
-          </p>
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('profitability.title')}</h1>
+          <p className="text-gray-600">{t('profitability.subtitle')}</p>
         </div>
 
   <div className="card p-8 mb-8">

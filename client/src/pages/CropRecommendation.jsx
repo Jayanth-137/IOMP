@@ -3,6 +3,7 @@ import { Sprout } from 'lucide-react';
 import { recommendService } from '../services/api';
 import Loader from '../components/Loader';
 import Toast from '../components/Toast';
+import { useTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -29,6 +30,7 @@ const CropRecommendation = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [toast, setToast] = useState(null);
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     setFormData({
@@ -45,10 +47,10 @@ const CropRecommendation = () => {
     try {
       const response = await recommendService.getCropSuitability(formData);
       setResult(response.data);
-      setToast({ message: 'Crop recommendation generated successfully!', type: 'success' });
+  setToast({ message: t('recommendation.success'), type: 'success' });
     } catch (error) {
       setToast({
-        message: error.response?.data?.message || 'Failed to get recommendation. Please try again.',
+        message: error.response?.data?.message || t('recommendation.failed'),
         type: 'error',
       });
     } finally {
@@ -100,17 +102,15 @@ const CropRecommendation = () => {
           <div className="flex justify-center mb-4">
             <Sprout className="h-12 w-12 text-green-600" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Crop Recommendation</h1>
-          <p className="text-gray-600">
-            Enter your soil and climate parameters to get personalized crop suggestions
-          </p>
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('recommendation.title')}</h1>
+          <p className="text-gray-600">{t('recommendation.subtitle')}</p>
         </div>
 
   <div className="card p-8 mb-8">
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label htmlFor="N" className="block text-sm font-medium text-gray-700 mb-2">
-                Nitrogen (N) - kg/ha
+                {t('recommendation.form.N.label')}
               </label>
               <input
                 type="number"
@@ -119,7 +119,7 @@ const CropRecommendation = () => {
                 value={formData.N}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="0-140"
+                placeholder={t('recommendation.form.N.placeholder')}
                 required
                 min="0"
                 step="0.01"
@@ -128,7 +128,7 @@ const CropRecommendation = () => {
 
             <div>
               <label htmlFor="P" className="block text-sm font-medium text-gray-700 mb-2">
-                Phosphorus (P) - kg/ha
+                {t('recommendation.form.P.label')}
               </label>
               <input
                 type="number"
@@ -137,7 +137,7 @@ const CropRecommendation = () => {
                 value={formData.P}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="5-145"
+                placeholder={t('recommendation.form.P.placeholder')}
                 required
                 min="0"
                 step="0.01"
@@ -146,7 +146,7 @@ const CropRecommendation = () => {
 
             <div>
               <label htmlFor="K" className="block text-sm font-medium text-gray-700 mb-2">
-                Potassium (K) - kg/ha
+                {t('recommendation.form.K.label')}
               </label>
               <input
                 type="number"
@@ -155,7 +155,7 @@ const CropRecommendation = () => {
                 value={formData.K}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="5-205"
+                placeholder={t('recommendation.form.K.placeholder')}
                 required
                 min="0"
                 step="0.01"
@@ -164,7 +164,7 @@ const CropRecommendation = () => {
 
             <div>
               <label htmlFor="temperature" className="block text-sm font-medium text-gray-700 mb-2">
-                Temperature (°C)
+                {t('recommendation.form.temperature.label')}
               </label>
               <input
                 type="number"
@@ -173,7 +173,7 @@ const CropRecommendation = () => {
                 value={formData.temperature}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="8-44"
+                placeholder={t('recommendation.form.temperature.placeholder')}
                 required
                 min="-50"
                 max="60"
@@ -183,7 +183,7 @@ const CropRecommendation = () => {
 
             <div>
               <label htmlFor="humidity" className="block text-sm font-medium text-gray-700 mb-2">
-                Humidity (%)
+                {t('recommendation.form.humidity.label')}
               </label>
               <input
                 type="number"
@@ -192,7 +192,7 @@ const CropRecommendation = () => {
                 value={formData.humidity}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="14-100"
+                placeholder={t('recommendation.form.humidity.placeholder')}
                 required
                 min="0"
                 max="100"
@@ -202,7 +202,7 @@ const CropRecommendation = () => {
 
             <div>
               <label htmlFor="ph" className="block text-sm font-medium text-gray-700 mb-2">
-                Soil pH
+                {t('recommendation.form.ph.label')}
               </label>
               <input
                 type="number"
@@ -211,7 +211,7 @@ const CropRecommendation = () => {
                 value={formData.ph}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="3.5-9.9"
+                placeholder={t('recommendation.form.ph.placeholder')}
                 required
                 min="0"
                 max="14"
@@ -221,7 +221,7 @@ const CropRecommendation = () => {
 
             <div>
               <label htmlFor="rainfall" className="block text-sm font-medium text-gray-700 mb-2">
-                Rainfall (mm)
+                {t('recommendation.form.rainfall.label')}
               </label>
               <input
                 type="number"
@@ -230,7 +230,7 @@ const CropRecommendation = () => {
                 value={formData.rainfall}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="20-300"
+                placeholder={t('recommendation.form.rainfall.placeholder')}
                 required
                 min="0"
                 step="0.01"
@@ -243,7 +243,7 @@ const CropRecommendation = () => {
                 disabled={loading}
                 className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Analyzing...' : 'Get Recommendation'}
+                {loading ? t('recommendation.loading') : t('recommendation.submit')}
               </button>
             </div>
           </form>

@@ -3,6 +3,7 @@ import { Stethoscope, Upload, Image as ImageIcon } from 'lucide-react';
 import { diagnoseService } from '../services/api';
 import Loader from '../components/Loader';
 import Toast from '../components/Toast';
+import { useTranslation } from 'react-i18next';
 
 const Diagnosis = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -11,6 +12,7 @@ const Diagnosis = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [toast, setToast] = useState(null);
+  const { t } = useTranslation();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -28,7 +30,7 @@ const Diagnosis = () => {
     e.preventDefault();
 
     if (!selectedFile) {
-      setToast({ message: 'Please select an image', type: 'error' });
+      setToast({ message: t('diagnosis.noImage'), type: 'error' });
       return;
     }
 
@@ -44,10 +46,10 @@ const Diagnosis = () => {
 
       const response = await diagnoseService.uploadImage(formData);
       setResult(response.data);
-      setToast({ message: 'Diagnosis completed successfully!', type: 'success' });
+  setToast({ message: t('diagnosis.success'), type: 'success' });
     } catch (error) {
       setToast({
-        message: error.response?.data?.message || 'Failed to diagnose. Please try again.',
+        message: error.response?.data?.message || t('diagnosis.failed'),
         type: 'error',
       });
     } finally {
@@ -71,10 +73,8 @@ const Diagnosis = () => {
           <div className="flex justify-center mb-4">
             <Stethoscope className="h-12 w-12 text-red-600" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Crop Diagnosis</h1>
-          <p className="text-gray-600">
-            Upload a photo of your crop to detect diseases and get treatment recommendations
-          </p>
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('diagnosis.title')}</h1>
+          <p className="text-gray-600">{t('diagnosis.subtitle')}</p>
         </div>
 
   <div className="card p-8 mb-8">
@@ -101,7 +101,7 @@ const Diagnosis = () => {
                       htmlFor="file-upload"
                       className="relative cursor-pointer bg-white rounded-md font-medium text-red-600 hover:text-red-700 focus-within:outline-none"
                     >
-                      <span>{previewUrl ? 'Change image' : 'Upload a file'}</span>
+                      <span>{previewUrl ? t('diagnosis.changeImage') : t('diagnosis.uploadFile')}</span>
                       <input
                         id="file-upload"
                         name="file-upload"
@@ -113,14 +113,14 @@ const Diagnosis = () => {
                     </label>
                     <p className="pl-1">or drag and drop</p>
                   </div>
-                  <p className="text-xs text-gray-500">PNG, JPG, JPEG up to 10MB</p>
+                  <p className="text-xs text-gray-500">{t('diagnosis.uploadHint')}</p>
                 </div>
               </div>
             </div>
 
             <div>
               <label htmlFor="question" className="block text-sm font-medium text-gray-700 mb-2">
-                Additional Question (Optional)
+                {t('diagnosis.questionLabel')}
               </label>
               <textarea
                 id="question"
@@ -129,7 +129,7 @@ const Diagnosis = () => {
                 onChange={(e) => setQuestion(e.target.value)}
                 rows="3"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                placeholder="Describe any specific symptoms or concerns..."
+                placeholder={t('diagnosis.questionPlaceholder')}
               />
             </div>
 
@@ -139,7 +139,7 @@ const Diagnosis = () => {
                 disabled={loading || !selectedFile}
                 className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow-md transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {loading ? 'Analyzing...' : 'Diagnose'}
+                {loading ? t('diagnosis.loading') : t('diagnosis.submit')}
               </button>
               {(selectedFile || result) && (
                 <button
@@ -159,18 +159,16 @@ const Diagnosis = () => {
         {result && (
           <div className="space-y-6">
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Diagnosis Results</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">{t('diagnosis.resultsTitle')}</h2>
 
               <div className="space-y-4">
                 <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Detected Disease</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('diagnosis.detectedDisease')}</h3>
                   <p className="text-xl font-bold text-red-700">
                     {result.disease || result.detected_disease || 'Unknown'}
                   </p>
                   {result.confidence && (
-                    <p className="text-sm text-gray-600 mt-1">
-                      Confidence: {(result.confidence * 100).toFixed(1)}%
-                    </p>
+                    <p className="text-sm text-gray-600 mt-1">{t('diagnosis.confidence', { pct: (result.confidence * 100).toFixed(1) })}</p>
                   )}
                 </div>
 

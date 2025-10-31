@@ -4,6 +4,7 @@ import { User, Mail, Lock, Sprout } from 'lucide-react';
 import { authService } from '../services/api';
 import Loader from '../components/Loader';
 import Toast from '../components/Toast';
+import { useTranslation } from 'react-i18next';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Signup = () => {
   });
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     setFormData({
@@ -27,7 +29,7 @@ const Signup = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      setToast({ message: 'Passwords do not match!', type: 'error' });
+      setToast({ message: t('signup.passwordMismatch'), type: 'error' });
       return;
     }
 
@@ -39,11 +41,11 @@ const Signup = () => {
         email: formData.email,
         password: formData.password,
       });
-      setToast({ message: 'Registration successful! Redirecting to login...', type: 'success' });
+  setToast({ message: t('signup.success'), type: 'success' });
       setTimeout(() => navigate('/login'), 1500);
     } catch (error) {
       setToast({
-        message: error.response?.data?.message || 'Registration failed. Please try again.',
+        message: error.response?.data?.message || t('signup.failed'),
         type: 'error',
       });
     } finally {
@@ -60,14 +62,14 @@ const Signup = () => {
           <div className="flex justify-center mb-4">
             <Sprout className="h-12 w-12 text-green-600" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
-          <p className="text-gray-600 mt-2">Join CropAssist today</p>
+          <h2 className="text-3xl font-bold text-gray-800">{t('signup.title')}</h2>
+          <p className="text-gray-600 mt-2">{t('signup.subtitle')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-              Full Name
+              {t('signup.name')}
             </label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -78,7 +80,7 @@ const Signup = () => {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
-                placeholder="John Doe"
+                placeholder={t('signup.namePlaceholder')}
                 required
               />
             </div>
@@ -86,7 +88,7 @@ const Signup = () => {
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
+              {t('signup.email')}
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -97,7 +99,7 @@ const Signup = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
-                placeholder="farmer@example.com"
+                placeholder={t('signup.emailPlaceholder')}
                 required
               />
             </div>
@@ -147,7 +149,7 @@ const Signup = () => {
             disabled={loading}
             className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? <Loader message="" /> : 'Sign Up'}
+            {loading ? <Loader message="" /> : t('signup.submit')}
           </button>
         </form>
 

@@ -3,18 +3,128 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "login": "Login",
-    "signup": "Sign up"
+    "signup": "Sign up",
+    "recommend": "Crop Recommendation",
+    "forecast": "Price Forecast",
+    "profitability": "Profitability",
+    "diagnose": "Diagnosis",
+    "logout": "Logout",
+    "features": "Features"
   },
+  "brand": "CropAssist",
   "landing": {
-    "title": "Welcome to CropAssist",
-    "subtitle": "Crop insights and forecasts"
+    "hero": {
+      "subtitle": "Empowering Farmers with Data-Driven Decisions",
+      "getStarted": "Get Started"
+    },
+    "features": {
+      "recommend": { "description": "Get personalized crop suggestions based on soil conditions and climate data." },
+      "forecast": { "description": "Access market trends and price predictions to maximize your profits." },
+      "profitability": { "description": "Compare crop options and make informed decisions on what to grow." },
+      "diagnose": { "description": "Detect diseases and get treatment recommendations using AI technology." }
+    }
   },
   "login": {
-    "email": "Email",
+    "title": "Welcome Back",
+    "subtitle": "Sign in to access your dashboard",
+    "email": "Email Address",
+    "emailPlaceholder": "farmer@example.com",
     "password": "Password",
-    "submit": "Sign in"
+    "passwordPlaceholder": "Enter your password",
+    "submit": "Sign In",
+    "success": "Login successful!",
+    "failed": "Login failed. Please try again.",
+    "noAccount": "Don't have an account?"
+  },
+  "signup": {
+    "title": "Create Account",
+    "subtitle": "Join CropAssist today",
+    "name": "Full Name",
+    "namePlaceholder": "John Doe",
+    "email": "Email Address",
+    "emailPlaceholder": "farmer@example.com",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordMismatch": "Passwords do not match!",
+    "submit": "Sign Up",
+    "success": "Registration successful! Redirecting to login...",
+    "failed": "Registration failed. Please try again."
   },
   "dashboard": {
-    "welcome": "Welcome to the dashboard"
+    "welcome": "Welcome to the dashboard",
+    "anonymous": "Farmer",
+    "subtitle": "Choose a tool below to get started with data-driven farming decisions.",
+    "gettingStarted": { "title": "Getting Started with CropAssist" },
+    "steps": {
+      "analyze": {
+        "title": "Analyze Your Soil",
+        "description": "Use the Crop Recommendation tool to input your soil parameters and get personalized crop suggestions."
+      },
+      "market": {
+        "title": "Check Market Prices",
+        "description": "Review price forecasts to understand market trends and plan your crop selection accordingly."
+      },
+      "monitor": {
+        "title": "Monitor Crop Health",
+        "description": "Use the Diagnosis tool to detect diseases early and take preventive measures to protect your crops."
+      }
+    },
+    "cards": {
+      "recommend": { "description": "Get AI-powered crop suggestions based on your soil and climate conditions." },
+      "forecast": { "description": "Access market trends and future price predictions for various crops." },
+      "profitability": { "description": "Compare expected returns and make informed crop selection decisions." },
+      "diagnose": { "description": "Detect plant diseases and get treatment recommendations instantly." }
+    }
+  },
+  "recommendation": {
+    "success": "Crop recommendation generated successfully!",
+    "failed": "Failed to get recommendation. Please try again.",
+    "title": "Crop Recommendation",
+    "subtitle": "Enter your soil and climate parameters to get personalized crop suggestions",
+    "form": {
+      "N": { "label": "Nitrogen (N) - kg/ha", "placeholder": "0-140" },
+      "P": { "label": "Phosphorus (P) - kg/ha", "placeholder": "5-145" },
+      "K": { "label": "Potassium (K) - kg/ha", "placeholder": "5-205" },
+      "temperature": { "label": "Temperature (°C)", "placeholder": "8-44" },
+      "humidity": { "label": "Humidity (%)", "placeholder": "14-100" },
+      "ph": { "label": "Soil pH", "placeholder": "3.5-9.9" },
+      "rainfall": { "label": "Rainfall (mm)", "placeholder": "20-300" }
+    },
+    "loading": "Analyzing...",
+    "submit": "Get Recommendation",
+    "result": { "title": "Recommended Crop", "descriptionFallback": "This crop is best suited for your soil and climate conditions." }
+  },
+  "forecast": {
+    "title": "Price Forecast",
+    "subtitle": "View market price trends and predictions for various crops",
+    "form": { "selectCrop": "Select Crop", "chooseCropPlaceholder": "Choose a crop..." },
+    "selectCropError": "Please select a crop",
+    "success": "Price forecast loaded successfully!",
+    "failed": "Failed to get price forecast. Please try again.",
+    "loading": "Loading Forecast...",
+    "submit": "View Price Forecast"
+  },
+  "profitability": {
+    "title": "Profitability Analysis",
+    "subtitle": "Compare your crop choice with system recommendations to maximize returns",
+    "success": "Profitability analysis completed!",
+    "failed": "Failed to analyze profitability. Please try again."
+  },
+  "diagnosis": {
+    "title": "Crop Diagnosis",
+    "subtitle": "Upload a photo of your crop to detect diseases and get treatment recommendations",
+    "noImage": "Please select an image",
+    "success": "Diagnosis completed successfully!",
+    "failed": "Failed to diagnose. Please try again.",
+    "changeImage": "Change image",
+    "uploadFile": "Upload a file",
+    "uploadHint": "PNG, JPG, JPEG up to 10MB",
+    "questionLabel": "Additional Question (Optional)",
+    "questionPlaceholder": "Describe any specific symptoms or concerns...",
+    "loading": "Analyzing...",
+    "submit": "Diagnose",
+    "resultsTitle": "Diagnosis Results",
+    "detectedDisease": "Detected Disease",
+    "confidence": "Confidence: {{pct}}%"
   }
 }

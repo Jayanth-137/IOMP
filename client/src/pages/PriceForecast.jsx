@@ -4,6 +4,7 @@ import { forecastService } from '../services/api';
 import Loader from '../components/Loader';
 import Toast from '../components/Toast';
 import { Line } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,6 +23,7 @@ const PriceForecast = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [toast, setToast] = useState(null);
+  const { t } = useTranslation();
 
   const crops = [
     'Rice', 'Wheat', 'Maize', 'Cotton', 'Sugarcane', 'Potato', 'Tomato',
@@ -31,7 +33,7 @@ const PriceForecast = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedCrop) {
-      setToast({ message: 'Please select a crop', type: 'error' });
+      setToast({ message: t('forecast.selectCropError'), type: 'error' });
       return;
     }
 
@@ -41,10 +43,10 @@ const PriceForecast = () => {
     try {
       const response = await forecastService.getPriceDistribution(selectedCrop);
       setResult(response.data);
-      setToast({ message: 'Price forecast loaded successfully!', type: 'success' });
+  setToast({ message: t('forecast.success'), type: 'success' });
     } catch (error) {
       setToast({
-        message: error.response?.data?.message || 'Failed to get price forecast. Please try again.',
+        message: error.response?.data?.message || t('forecast.failed'),
         type: 'error',
       });
     } finally {
@@ -119,17 +121,15 @@ const PriceForecast = () => {
           <div className="flex justify-center mb-4">
             <TrendingUp className="h-12 w-12 text-blue-600" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-2 font-heading">Price Forecast</h1>
-          <p className="text-gray-600">
-            View market price trends and predictions for various crops
-          </p>
+          <h1 className="text-4xl font-bold text-gray-800 mb-2 font-heading">{t('forecast.title')}</h1>
+          <p className="text-gray-600">{t('forecast.subtitle')}</p>
         </div>
 
   <div className="card p-8 mb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="crop" className="block text-sm font-medium text-gray-700 mb-2">
-                Select Crop
+                {t('forecast.form.selectCrop')}
               </label>
               <select
                 id="crop"
@@ -138,7 +138,7 @@ const PriceForecast = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
-                <option value="">Choose a crop...</option>
+                <option value="">{t('forecast.form.chooseCropPlaceholder')}</option>
                 {crops.map((crop) => (
                   <option key={crop} value={crop}>
                     {crop}
@@ -152,7 +152,7 @@ const PriceForecast = () => {
               disabled={loading}
               className="btn-blue w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Loading Forecast...' : 'View Price Forecast'}
+              {loading ? t('forecast.loading') : t('forecast.submit')}
             </button>
           </form>
         </div>

@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { Sprout, TrendingUp, DollarSign, Stethoscope, BarChart3 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Landing = () => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem('token');
+  const { t } = useTranslation();
 
   const handleGetStarted = () => {
     if (isAuthenticated) {
@@ -16,26 +18,26 @@ const Landing = () => {
   const features = [
     {
       icon: Sprout,
-      title: 'Crop Recommendation',
-      description: 'Get personalized crop suggestions based on soil conditions and climate data.',
+      titleKey: 'nav.recommend',
+      descKey: 'landing.features.recommend.description',
       path: '/recommend',
     },
     {
       icon: TrendingUp,
-      title: 'Price Forecasting',
-      description: 'Access market trends and price predictions to maximize your profits.',
+      titleKey: 'nav.forecast',
+      descKey: 'landing.features.forecast.description',
       path: '/forecast',
     },
     {
       icon: DollarSign,
-      title: 'Profitability Analysis',
-      description: 'Compare crop options and make informed decisions on what to grow.',
+      titleKey: 'nav.profitability',
+      descKey: 'landing.features.profitability.description',
       path: '/profitability',
     },
     {
       icon: Stethoscope,
-      title: 'Crop Diagnosis',
-      description: 'Detect diseases and get treatment recommendations using AI technology.',
+      titleKey: 'nav.diagnose',
+      descKey: 'landing.features.diagnose.description',
       path: '/diagnose',
     },
   ];
@@ -57,16 +59,16 @@ const Landing = () => {
             <Sprout className="h-20 w-20 text-green-600" />
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-green-800 mb-4">
-            CropAssist
+            {t('brand')}
           </h1>
           <p className="text-2xl md:text-3xl text-gray-700 mb-8 font-light">
-            Empowering Farmers with Data-Driven Decisions
+            {t('landing.hero.subtitle')}
           </p>
           <button
             onClick={handleGetStarted}
             className="btn-primary px-10 py-4"
           >
-            Get Started
+            {t('landing.hero.getStarted')}
           </button>
         </div>
 
@@ -99,10 +101,10 @@ const Landing = () => {
                 </div>
               </div>
               <h3 className="text-xl font-bold text-gray-800 text-center mb-3">
-                {feature.title}
+                {t(feature.titleKey)}
               </h3>
               <p className="text-gray-600 text-center mb-4">
-                {feature.description}
+                {t(feature.descKey)}
               </p>
               <div className="text-center">
                 <span className="text-green-600 font-semibold text-sm hover:underline">
