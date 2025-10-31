@@ -1,0 +1,26 @@
+sl_no,district,market,commodity,variety,grade,min_price,max_price,modal_price,price_date
+1,Khammam,Bhadrachalam,Paddy(Dhan)(Common),Samba Masuri,FAQ,2389,2389,2389,30 Oct 2025
+2,Khammam,Burgampadu,Paddy(Dhan)(Common),Samba Masuri,FAQ,2389,2389,2389,30 Oct 2025
+3,Nalgonda,Choutuppal,Paddy(Dhan)(Common),I.R. 64,FAQ,2000,2200,2100,30 Oct 2025
+4,Mahbubnagar,Devarakadra,Paddy(Dhan)(Common),Hansa,Non-FAQ,1680,1759,1720,30 Oct 2025
+5,Mahbubnagar,Devarakadra,Paddy(Dhan)(Common),Sona,Non-FAQ,2009,2109,2059,30 Oct 2025
+6,Nalgonda,Devarakonda,Paddy(Dhan)(Common),MTU-1010,FAQ,2300,2300,2300,30 Oct 2025
+7,Nalgonda,Devarakonda,Paddy(Dhan)(Common),MTU-1010,Non-FAQ,2300,2300,2300,30 Oct 2025
+8,Karimnagar,Gangadhara,Paddy(Dhan)(Common),I.R. 64,FAQ,2400,2400,2400,30 Oct 2025
+9,Karimnagar,Huzzurabad,Paddy(Dhan)(Common),1001,FAQ,2369,2369,2369,30 Oct 2025
+10,Karimnagar,Huzzurabad,Paddy(Dhan)(Common),MTU-1010,FAQ,2389,2389,2389,30 Oct 2025
+11,Nalgonda,Kodad,Paddy(Dhan)(Common),B P T,FAQ,2300,2300,2300,30 Oct 2025
+12,Mahbubnagar,Kollapur,Paddy(Dhan)(Common),Common,FAQ,2500,2500,2500,30 Oct 2025
+13,Mahbubnagar,Mahbubnagar,Paddy(Dhan)(Common),Hansa,FAQ,2690,2701,2690,30 Oct 2025
+14,Karimnagar,Manakodur,Paddy(Dhan)(Common),MTU-1010,FAQ,2389,2389,2389,30 Oct 2025
+15,Mahbubnagar,Narayanpet,Paddy(Dhan)(Common),Hansa,Non-FAQ,1500,2669,2649,30 Oct 2025
+16,Mahbubnagar,Narayanpet,Paddy(Dhan)(Common),Sona,Non-FAQ,1829,2170,2170,30 Oct 2025
+17,Nalgonda,Neredcherla,Paddy(Dhan)(Common),B P T,FAQ,2380,2380,2380,30 Oct 2025
+18,Khammam,Sattupalli,Paddy(Dhan)(Common),Common,Non-FAQ,2200,2320,2300,30 Oct 2025
+19,Nalgonda,Suryapeta,Paddy(Dhan)(Common),B P T,FAQ,1611,1831,1831,30 Oct 2025
+20,Nalgonda,Suryapeta,Paddy(Dhan)(Common),HMT,FAQ,1700,1979,1972,30 Oct 2025
+21,Nalgonda,Suryapeta,Paddy(Dhan)(Common),I.R. 64,FAQ,1509,1839,1719,30 Oct 2025
+22,Nalgonda,Thungathurthy,Paddy(Dhan)(Common),1001,Non-FAQ,2300,2300,2300,30 Oct 2025
+23,Nalgonda,Tirumalagiri,Paddy(Dhan)(Common),I.R. 64,FAQ,1651,1932,1869,30 Oct 2025
+24,Nalgonda,Tirumalagiri,Paddy(Dhan)(Common),Samba Masuri,FAQ,1759,1808,1789,30 Oct 2025
+25,Khammam,Wyra,Paddy(Dhan)(Common),Swarna Masuri (New),FAQ,2280,2320,2300,30 Oct 2025
