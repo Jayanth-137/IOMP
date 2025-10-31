@@ -12,6 +12,13 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from joblib import load
+
+#cnn part
+import tensorflow as tf
+from tensorflow.keras.preprocessing import image
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
 # -------------------------
 # Flask Setup
 # -------------------------
@@ -30,6 +37,47 @@ FEATURES = [
     "max_price_lag_1", "max_price_lag_2", "max_price_lag_3",
     "modal_price_lag_1", "modal_price_lag_2", "modal_price_lag_3"
 ]
+
+
+#cnn load model and predict function
+# Load your trained model
+cnn_MODEL_PATH = "best_model.keras"
+cnn_model = tf.keras.models.load_model(cnn_MODEL_PATH)
+
+# Define the class labels
+CLASS_NAMES = {
+    0: 'bacterial_leaf_blight',
+    1: 'bacterial_leaf_streak',
+    2: 'bacterial_panicle_blight',
+    3: 'blast',
+    4: 'brown_spot',
+    5: 'dead_heart',
+    6: 'downy_mildew',
+    7: 'hispa',
+    8: 'normal',
+    9: 'tungro'
+}
+
+# Prediction function
+def predict_disease(img_path):
+    # Load and preprocess image
+    img = image.load_img(img_path, target_size=(224, 224))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array = img_array / 255.0  # normalize (since you used Rescaling(1./255))
+
+    # Predict
+    predictions = cnn_model.predict(img_array)
+    predicted_class = np.argmax(predictions, axis=1)[0]
+    confidence = float(np.max(predictions))
+
+    return {
+        "predicted_class_index": int(predicted_class),
+        "predicted_class_name": CLASS_NAMES[predicted_class],
+        "confidence": round(confidence, 4)
+    }
+
+
 
 
 if not os.path.exists(MODEL_PATH):
@@ -307,6 +355,30 @@ def predict():
     
 
 
+#cnn api request
+# API endpoint
+@app.route('/predict-disease', methods=['POST'])
+def predict_paddy_disease():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No file selected"}), 400
+
+    # Save the uploaded image temporarily
+    upload_folder = "uploads"
+    os.makedirs(upload_folder, exist_ok=True)
+    img_path = os.path.join(upload_folder, file.filename)
+    file.save(img_path)
+
+    # Predict
+    result = predict_disease(img_path)
+
+    # Clean up
+    os.remove(img_path)
+
+    return jsonify(result)
 
 
 if __name__ == "__main__":
