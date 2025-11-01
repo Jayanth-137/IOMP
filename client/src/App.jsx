@@ -5,7 +5,7 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
-import CropRecommendation from './pages/CropRecommendation';
+import CropRotation from './pages/CropRotation';
 import PriceForecast from './pages/PriceForecast';
 import PricePrediction from './pages/PricePrediction';
 import Diagnosis from './pages/Diagnosis';
@@ -47,7 +47,7 @@ function App() {
               path="/recommend"
               element={
                 <ProtectedRoute>
-                  <CropRecommendation />
+                  <CropRotation />
                 </ProtectedRoute>
               }
             />
