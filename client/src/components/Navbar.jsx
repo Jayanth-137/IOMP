@@ -40,8 +40,8 @@ const Navbar = () => {
           activeClass: 'bg-blue-600 text-white',
         },
         {
-          to: '/profitability',
-          label: t('nav.profitability'),
+          to: '/price-prediction',
+          label: t('nav.pricePrediction'),
           hoverClass: 'hover:text-soil-700 px-3 py-1 rounded-md no-underline',
           activeClass: 'bg-soil-600 text-white',
         },

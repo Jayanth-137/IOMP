@@ -6,7 +6,7 @@
     "signup": "Sign up",
     "recommend": "Crop Recommendation",
     "forecast": "Price Forecast",
-    "profitability": "Profitability",
+  "pricePrediction": "Price Prediction",
     "diagnose": "Diagnosis",
     "logout": "Logout",
     "features": "Features"
@@ -20,7 +20,7 @@
     "features": {
       "recommend": { "description": "Get personalized crop suggestions based on soil conditions and climate data." },
       "forecast": { "description": "Access market trends and price predictions to maximize your profits." },
-      "profitability": { "description": "Compare crop options and make informed decisions on what to grow." },
+  "pricePrediction": { "description": "Predict market prices for selected varieties using market and date inputs." },
       "diagnose": { "description": "Detect diseases and get treatment recommendations using AI technology." }
     }
   },
@@ -72,7 +72,7 @@
     "cards": {
       "recommend": { "description": "Get AI-powered crop suggestions based on your soil and climate conditions." },
       "forecast": { "description": "Access market trends and future price predictions for various crops." },
-      "profitability": { "description": "Compare expected returns and make informed crop selection decisions." },
+  "pricePrediction": { "description": "Compare expected returns and make informed crop selection decisions." },
       "diagnose": { "description": "Detect plant diseases and get treatment recommendations instantly." }
     }
   },
@@ -104,11 +104,33 @@
     "loading": "Loading Forecast...",
     "submit": "View Price Forecast"
   },
-  "profitability": {
-    "title": "Profitability Analysis",
-    "subtitle": "Compare your crop choice with system recommendations to maximize returns",
-    "success": "Profitability analysis completed!",
-    "failed": "Failed to analyze profitability. Please try again."
+  "pricePrediction": {
+    "title": "Price Prediction",
+    "subtitle": "Predict market price for a crop given market, variety, grade and date",
+    "success": "Price prediction completed!",
+    "failed": "Failed to predict price. Please try again.",
+    "selectRequired": "Please select district, market, variety and grade before predicting.",
+    "select": "Select",
+    "fields": {
+      "district": "District",
+      "market": "Market",
+      "variety": "Variety",
+      "grade": "Grade",
+      "day": "Day",
+      "month": "Month",
+      "day_of_week": "Day of Week"
+    },
+    "hints": {
+      "district": "Choose the district (encoded)",
+      "market": "Search or select the market",
+      "filterMarkets": "Filter markets by name...",
+      "variety": "Select seed/variety",
+      "grade": "Choose grade (FAQ/Non-FAQ)"
+    },
+    "loading": "Predicting...",
+    "submit": "Predict Price",
+    "resultTitle": "Predicted Price",
+    "resultSubtitle": "Based on provided district, market, variety, grade and date"
   },
   "diagnosis": {
     "title": "Crop Diagnosis",

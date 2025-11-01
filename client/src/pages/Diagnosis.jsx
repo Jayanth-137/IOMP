@@ -46,6 +46,7 @@ const Diagnosis = () => {
 
       const response = await diagnoseService.uploadImage(formData);
       setResult(response.data);
+      // console.log('Diagnosis result:', response.data);
   setToast({ message: t('diagnosis.success'), type: 'success' });
     } catch (error) {
       setToast({
@@ -118,21 +119,6 @@ const Diagnosis = () => {
               </div>
             </div>
 
-            <div>
-              <label htmlFor="question" className="block text-sm font-medium text-gray-700 mb-2">
-                {t('diagnosis.questionLabel')}
-              </label>
-              <textarea
-                id="question"
-                name="question"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                rows="3"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                placeholder={t('diagnosis.questionPlaceholder')}
-              />
-            </div>
-
             <div className="flex space-x-4">
               <button
                 type="submit"
@@ -165,7 +151,7 @@ const Diagnosis = () => {
                 <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('diagnosis.detectedDisease')}</h3>
                   <p className="text-xl font-bold text-red-700">
-                    {result.disease || result.detected_disease || 'Unknown'}
+                    {result.predicted_class_name || 'Unknown'}
                   </p>
                   {result.confidence && (
                     <p className="text-sm text-gray-600 mt-1">{t('diagnosis.confidence', { pct: (result.confidence * 100).toFixed(1) })}</p>

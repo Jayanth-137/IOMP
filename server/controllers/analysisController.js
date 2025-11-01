@@ -1,78 +1,84 @@
-// Profitability analysis controller - simplified calculations
+// Price prediction controller - forwards request to ML Flask service and returns model output.
+const axios = require("axios");
 
-exports.profitability = async (req, res, next) => {
+// Use ML service URL from env or default to a host likely running the Flask app.
+// Set ML_SERVICE_URL in your environment if the service is at a different IP (e.g. 172.20.10.4).
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://172.20.10.4:9550";
+
+exports.pricePrediction = async (req, res, next) => {
   try {
-    const { user_crop, land_size, investment } = req.body;
-    const land = Number(land_size) || 0;
-    const invest = Number(investment) || 0;
-
-    // Fake recommended crop selection
-    const recommended_crop = "Maize";
-
-    // Mock parameters (per acre yields and price)
-    const metrics = {
-      [user_crop]: {
-        yield_per_acre: 20,
-        price_per_unit: 2000,
-        cost_per_acre: 15000,
-      },
-      [recommended_crop]: {
-        yield_per_acre: 25,
-        price_per_unit: 1800,
-        cost_per_acre: 12000,
-      },
+    console.log("Received price prediction request");
+    const data = req.body;
+    console.log(data);
+    const payload = {
+      district: data.district || "",
+      market: data.market || "",
+      variety: data.variety || "",
+      grade: data.grade || "",
+      day: data.day ? Number(data.day) : undefined,
+      month: data.month ? Number(data.month) : undefined,
+      day_of_week: data.day_of_week ? Number(data.day_of_week) : undefined,
+      // // include any lag features if provided
+      // min_price_lag_1: data.min_price_lag_1,
+      // min_price_lag_2: data.min_price_lag_2,
+      // min_price_lag_3: data.min_price_lag_3,
+      // max_price_lag_1: data.max_price_lag_1,
+      // max_price_lag_2: data.max_price_lag_2,
+      // max_price_lag_3: data.max_price_lag_3,
+      // modal_price_lag_1: data.modal_price_lag_1,
+      // modal_price_lag_2: data.modal_price_lag_2,
+      // modal_price_lag_3: data.modal_price_lag_3,
     };
 
-    const user_metric = metrics[user_crop] || {
-      yield_per_acre: 18,
-      price_per_unit: 1500,
-      cost_per_acre: 10000,
-    };
-    const rec_metric = metrics[recommended_crop];
+    // Remove undefined keys so the ML service uses its defaults
+    // Object.keys(payload).forEach(
+    //   (k) => payload[k] === undefined && delete payload[k]
+    // );
 
-    const user_revenue = Math.round(
-      user_metric.yield_per_acre * land * user_metric.price_per_unit
-    );
-    const rec_revenue = Math.round(
-      rec_metric.yield_per_acre * land * rec_metric.price_per_unit
-    );
+    const url = `${ML_SERVICE_URL}/predict`;
+    // console.log(payload);
+    const mlRes = await axios.post(url, data, {
+      headers: { "Content-Type": "application/json" },
+      timeout: 10_000,
+    });
 
-    const user_cost = Math.round(user_metric.cost_per_acre * land + invest);
-    const rec_cost = Math.round(rec_metric.cost_per_acre * land + invest);
+    // Expecting fields like predicted_min_price, predicted_max_price, predicted_modal_price
+    const mlData = mlRes.data || {};
 
-    const user_profit = user_revenue - user_cost;
-    const rec_profit = rec_revenue - rec_cost;
-
-    const revenue_diff = rec_revenue - user_revenue;
-    const cost_diff = rec_cost - user_cost;
-    const profit_diff = rec_profit - user_profit;
-
-    const user_roi = user_cost > 0 ? (user_profit / user_cost) * 100 : 0;
-    const rec_roi = rec_cost > 0 ? (rec_profit / rec_cost) * 100 : 0;
-
-    const roi_diff = rec_roi - user_roi;
+    // Sanity check: if the model returned inconsistent values (min > max), add a warning note
+    const note = [];
+    if (
+      typeof mlData.predicted_min_price === "number" &&
+      typeof mlData.predicted_max_price === "number" &&
+      mlData.predicted_min_price > mlData.predicted_max_price
+    ) {
+      note.push(
+        "Model returned predicted_min_price > predicted_max_price — verify model outputs."
+      );
+    }
 
     res.json({
-      user_crop,
-      recommended_crop,
-      user_revenue,
-      recommended_revenue: rec_revenue,
-      user_cost,
-      recommended_cost: rec_cost,
-      user_profit,
-      recommended_profit: rec_profit,
-      revenue_diff,
-      cost_diff,
-      profit_diff,
-      user_roi,
-      recommended_roi: rec_roi,
-      roi_diff,
-      recommendation:
-        profit_diff > 0
-          ? `Switching to ${recommended_crop} may improve profit by ₹${profit_diff}`
-          : `Sticking with ${user_crop} appears comparable.`,
+      requested: {
+        district: payload.district,
+        market: payload.market,
+        variety: payload.variety,
+        grade: payload.grade
+      },
+      model: mlData,
+      note: note.length ? note.join(" ") : undefined,
     });
   } catch (err) {
+    // If the ML service responded with an error, forward a helpful message
+    if (err.response) {
+      const status = err.response.status || 500;
+      const msg =
+        err.response.data || err.response.statusText || "ML service error";
+      return res
+        .status(status)
+        .json({ error: "ML service error", details: msg });
+    }
+
+    // Network/timeout/other errors
     next(err);
   }
 };

@@ -21,24 +21,56 @@ const Landing = () => {
       titleKey: 'nav.recommend',
       descKey: 'landing.features.recommend.description',
       path: '/recommend',
+      // recommend uses agri (green)
+      color: {
+        pillBg: 'bg-agri-100',
+        icon: 'text-agri-600',
+        title: 'text-agri-700',
+        link: 'text-agri-600 hover:text-agri-800',
+        accent: 'bg-agri-600',
+      },
     },
     {
       icon: TrendingUp,
       titleKey: 'nav.forecast',
       descKey: 'landing.features.forecast.description',
       path: '/forecast',
+      // forecast uses blue
+      color: {
+        pillBg: 'bg-blue-50',
+        icon: 'text-blue-600',
+        title: 'text-blue-700',
+        link: 'text-blue-600 hover:text-blue-800',
+        accent: 'bg-blue-600',
+      },
     },
     {
       icon: DollarSign,
-      titleKey: 'nav.profitability',
-      descKey: 'landing.features.profitability.description',
-      path: '/profitability',
+      titleKey: 'nav.pricePrediction',
+      descKey: 'landing.features.pricePrediction.description',
+      path: '/price-prediction',
+      // price prediction uses soil (brown)
+      color: {
+        pillBg: 'bg-soil-100',
+        icon: 'text-soil-600',
+        title: 'text-soil-700',
+        link: 'text-soil-600 hover:text-soil-800',
+        accent: 'bg-soil-600',
+      },
     },
     {
       icon: Stethoscope,
       titleKey: 'nav.diagnose',
       descKey: 'landing.features.diagnose.description',
       path: '/diagnose',
+      // diagnose uses red (alert/diagnosis)
+      color: {
+        pillBg: 'bg-red-100',
+        icon: 'text-red-600',
+        title: 'text-red-700',
+        link: 'text-red-600 hover:text-red-800',
+        accent: 'bg-red-600',
+      },
     },
   ];
 
@@ -90,27 +122,29 @@ const Landing = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div
-              key={index}
-              onClick={() => handleFeatureClick(feature.path)}
-              className="card hover:shadow-xl transition-all transform hover:-translate-y-1 cursor-pointer p-6"
-            >
-              <div className="flex justify-center mb-4">
-                <div className="bg-green-100 rounded-full p-4">
-                  <feature.icon className="h-8 w-8 text-green-600" />
+              <div
+                key={index}
+                onClick={() => handleFeatureClick(feature.path)}
+                className="card relative hover:shadow-xl transition-all transform hover:-translate-y-1 cursor-pointer p-6"
+              >
+                {/* top accent bar */}
+                <div className={`${feature.color.accent} absolute left-0 right-0 top-0 h-1 rounded-t-xl`} />
+                <div className="flex justify-center mb-4">
+                  <div className={`${feature.color.pillBg} rounded-full p-4`}>
+                    <feature.icon className={`h-8 w-8 ${feature.color.icon}`} />
+                  </div>
                 </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 text-center mb-3">
+              <h3 className={`text-xl font-bold ${feature.color.title} text-center mb-3`}>
                 {t(feature.titleKey)}
               </h3>
               <p className="text-gray-600 text-center mb-4">
                 {t(feature.descKey)}
               </p>
-              <div className="text-center">
-                <span className="text-green-600 font-semibold text-sm hover:underline">
-                  Learn More →
-                </span>
-              </div>
+                <div className="text-center">
+                  <span className={`${feature.color.link} font-semibold text-sm`}>
+                    Learn More →
+                  </span>
+                </div>
             </div>
           ))}
         </div>

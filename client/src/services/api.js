@@ -48,7 +48,10 @@ export const forecastService = {
 };
 
 export const analysisService = {
-  getProfitability: (data) => api.post("/analysis/profitability", data),
+  // Price prediction replaces previous profitability analysis
+  getPricePrediction: (data) => api.post("/analysis/price_prediction", data),
+  // If you have older clients that call getProfitability, you can re-enable this alias
+  // getProfitability: (data) => api.post("/analysis/price_prediction", data),
 };
 
 export const diagnoseService = {

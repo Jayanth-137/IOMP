@@ -23,11 +23,11 @@ const Dashboard = () => {
       path: '/forecast',
     },
     {
-      title: t('nav.profitability'),
-      description: t('dashboard.cards.profitability.description'),
+      title: t('nav.pricePrediction'),
+      description: t('dashboard.cards.pricePrediction.description'),
       icon: DollarSign,
       color: 'bg-soil-500',
-      path: '/profitability',
+      path: '/price-prediction',
     },
     {
       title: t('nav.diagnose'),

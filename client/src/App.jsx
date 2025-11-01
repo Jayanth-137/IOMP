@@ -7,7 +7,7 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import CropRecommendation from './pages/CropRecommendation';
 import PriceForecast from './pages/PriceForecast';
-import Profitability from './pages/Profitability';
+import PricePrediction from './pages/PricePrediction';
 import Diagnosis from './pages/Diagnosis';
 
 const ProtectedRoute = ({ children }) => {
@@ -60,10 +60,10 @@ function App() {
               }
             />
             <Route
-              path="/profitability"
+              path="/price-prediction"
               element={
                 <ProtectedRoute>
-                  <Profitability />
+                  <PricePrediction />
                 </ProtectedRoute>
               }
             />

@@ -304,23 +304,23 @@ def predict():
 
         # Encode categorical values using saved label encoders
 
-        try:
-            # print("======>>>>",encoders["district"].transform([data["district"]])[0])
-            district_encoded = encoders["district"].transform([data["district"]])[0]
-            market_encoded = encoders["market"].transform([data["market"]])[0]
-            variety_encoded = encoders["variety"].transform([data["variety"]])[0]
-            grade_encoded = encoders["grade"].transform([data["grade"]])[0]
-        except ValueError as e:
-            return jsonify({
-                "error": f"Encoding failed: {e}. Ensure your input values match training categories."
-            }), 400
+        # try:
+        #     # print("======>>>>",encoders["district"].transform([data["district"]])[0])
+        #     district_encoded = encoders["district"].transform([data["district"]])[0]
+        #     market_encoded = encoders["market"].transform([data["market"]])[0]
+        #     variety_encoded = encoders["variety"].transform([data["variety"]])[0]
+        #     grade_encoded = encoders["grade"].transform([data["grade"]])[0]
+        # except ValueError as e:
+        #     return jsonify({
+        #         "error": f"Encoding failed: {e}. Ensure your input values match training categories."
+        #     }), 400
 
         # Build input row
         input_row = {
-            "district": district_encoded,
-            "market": market_encoded,
-            "variety": variety_encoded,
-            "grade": grade_encoded,
+            "district": data.get("district"),
+            "market": data.get("market"),
+            "variety": data.get("variety"),
+            "grade": data.get("grade"),
             "day": data.get("day", 1),
             "month": data.get("month", 1),
             "day_of_week": data.get("day_of_week", 1),

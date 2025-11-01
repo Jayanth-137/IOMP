@@ -6,7 +6,7 @@
     "signup": "సైన్ అప్",
     "recommend": "పంట సిఫార్సులు",
     "forecast": "ధరకల్పన",
-    "profitability": "లాభదాయకత",
+  "pricePrediction": "ధర అంచనాలు",
     "diagnose": "నిర్ధారణ",
     "logout": "లాగ్ అవుట్",
     "features": "ఫీచర్లు"
@@ -20,7 +20,7 @@
     "features": {
       "recommend": { "description": "మట్టిస్థితులు మరియు వాతావరణ డేటా ఆధారంగా వ్యక్తిగత పంట సూచనలను పొందండి." },
       "forecast": { "description": "మీ లాభాన్ని గరిష్టం చేయడానికి మార్కెట్ ధోరణులు మరియు ధర అంచనాలను చూడండి." },
-      "profitability": { "description": "పంట ఎంపికల‌ను పోల్చివి తీసుకుని ఏమి సాగించాలని నిర్ణయించుకోండి." },
+  "pricePrediction": { "description": "ఎంపిక చేయబడిన వేరియంట్లకు మార్కెట్ మరియు తేదీ ఆధారంగా ధర అంచనా వేయండి." },
       "diagnose": { "description": "AI ప్రోగ్రామింగ్ ద్వారా వ్యాధులను గుర్తించి చికిత్స సూచనలు పొందండి." }
     }
   },
@@ -72,7 +72,7 @@
     "cards": {
       "recommend": { "description": "మీ మట్టి మరియు వాతావరణ ఆధారంగా AI ఆధారిత పంట సూచనలను పొందండి." },
       "forecast": { "description": "విభిన్న పంటలకు మార్కెట్ ధోరణులు మరియు భవిష్యత్తు ధరలను చూడండి." },
-      "profitability": { "description": "నిర్దిష్ట రాబడి తేడాలను పోల్చి పంటను ఎంచుకోండి." },
+  "pricePrediction": { "description": "ఎంపిక చేసిన వేరియంట్ల కోసం మార్కెట్ ధర అంచనాలను మరియు ట్రెండ్లను చూసి నిర్ణయం తీసుకోండి." },
       "diagnose": { "description": "పంట వ్యాధులను గుర్తించండి మరియు చికిత్స ప్రతిపాదనలు పొందండి." }
     }
   },
@@ -104,11 +104,33 @@
     "loading": "ఫోర్కాస్ట్ లోడ్ అవుతోంది...",
     "submit": "ధరకల్పన చూడండి"
   },
-  "profitability": {
-    "title": "లాభదాయకత విశ్లేషణ",
-    "subtitle": "మీ పంట ఎంపికను సరిపోల్చి ఎక్కువ లాభం పొందండి",
-    "success": "లాభదాయకత విశ్లేషణ పూర్తి అయ్యింది!",
-    "failed": "లాభదాయకత విశ్లేషణ విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి."
+  "pricePrediction": {
+    "title": "Price Prediction",
+    "subtitle": "Predict market price for a crop given market, variety, grade and date",
+    "success": "Price prediction completed!",
+    "failed": "Failed to predict price. Please try again.",
+    "selectRequired": "Please select district, market, variety and grade before predicting.",
+    "select": "Select",
+    "fields": {
+      "district": "District",
+      "market": "Market",
+      "variety": "Variety",
+      "grade": "Grade",
+      "day": "Day",
+      "month": "Month",
+      "day_of_week": "Day of Week"
+    },
+    "hints": {
+      "district": "Choose the district (encoded)",
+      "market": "Search or select the market",
+      "filterMarkets": "Filter markets by name...",
+      "variety": "Select seed/variety",
+      "grade": "Choose grade (FAQ/Non-FAQ)"
+    },
+    "loading": "Predicting...",
+    "submit": "Predict Price",
+    "resultTitle": "Predicted Price",
+    "resultSubtitle": "Based on provided district, market, variety, grade and date"
   },
   "diagnosis": {
     "title": "పంట నిర్ధారణ",
