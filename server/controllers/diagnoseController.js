@@ -4,7 +4,8 @@ const path = require("path");
 const fs = require('fs'); 
 const FormData = require('form-data');
 
-const PREDICTION_API_URL = process.env.FLASK_API_URL+"/predict-disease";
+const PREDICTION_API_URL = process.env.ML_SERVICE_URL+"/predict-disease";
+
 
 // Define the class labels here, matching the Python model's output
 const CLASS_NAMES = {

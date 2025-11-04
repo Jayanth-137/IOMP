@@ -3,7 +3,7 @@ const axios = require("axios");
 
 // Use ML service URL from env or default to a host likely running the Flask app.
 // Set ML_SERVICE_URL in your environment if the service is at a different IP (e.g. 172.20.10.4).
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://172.20.10.4:9550";
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://127.0.0.1:9550";
 
 exports.pricePrediction = async (req, res, next) => {
   try {
