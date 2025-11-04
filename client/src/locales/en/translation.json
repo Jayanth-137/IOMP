@@ -81,6 +81,7 @@
     "failed": "Failed to get recommendation. Please try again.",
     "title": "Crop Recommendation",
     "subtitle": "Enter your soil and climate parameters to get personalized crop suggestions",
+    "geolocationUnsupported": "Geolocation is not supported by this browser. Please enter location manually.",
     "form": {
       "N": { "label": "Nitrogen (N) - kg/ha", "placeholder": "0-140" },
       "P": { "label": "Phosphorus (P) - kg/ha", "placeholder": "5-145" },

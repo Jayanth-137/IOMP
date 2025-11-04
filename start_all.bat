@@ -1,0 +1,13 @@
+@echo off
+echo Starting all services in new windows...
+
+echo Starting React Frontend...
+start cmd /k "cd client && npm start"
+echo Starting Node.js Backend...
+start cmd /k "cd server && npm start"
+echo Starting Flask ML Services...
+start cmd /k "cd ML && python required.py"
+start cmd /k "cd ML && python cropRotation.py"
+
+echo All services started.
+pause

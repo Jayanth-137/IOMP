@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -9,12 +9,10 @@ import {
   AlertTriangle,
   Calendar,
   Wind,
-  WindIcon,
   Thermometer,
   SproutIcon,
   CloudSunIcon,
   LightbulbIcon,
-  LeafIcon,
   LayersIcon,
   CalendarClock,
   FlaskConical,
@@ -22,15 +20,16 @@ import {
   ChevronUp,
   Info,
   Droplet,
-  Sun,
-  Clock,
 } from "lucide-react";
-import axios from "axios";
 import MultiStepLoader from "../reusableComponents/MultiStepLoader.jsx";
 import { soilTypes, previousCrops, commonCrops } from "../data.js";
-import AgricultureRecommendations from "../reusableComponents/AgricultureRecommendations.jsx";
+import { recommendService } from "../services/api.js";
+import Toast from "../components/Toast";
+import { useTranslation } from "react-i18next";
 
 export default function CropPlanningSystem() {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState({
     latitude: "",
     longitude: "",
@@ -51,6 +50,7 @@ export default function CropPlanningSystem() {
   const [result, setResult] = useState(null);
   const [step, setStep] = useState(1);
   const [selectedCrop, setSelectedCrop] = useState(null);
+  const [toast, setToast] = useState(null);
 
   const toggleCropSelection = (crop) => {
     setSelectedCrop(selectedCrop === crop ? null : crop);
@@ -77,15 +77,19 @@ export default function CropPlanningSystem() {
           }));
           setFetchingLocation(false);
         },
-        (error) => {
-          alert("Unable to retrieve your location. Please enter manually.");
+        () => {
+          setToast({
+            message: "Unable to retrieve your location. Please enter manually.",
+            type: "error",
+          });
           setFetchingLocation(false);
         }
       );
     } else {
-      alert(
-        "Geolocation is not supported by this browser. Please enter location manually."
-      );
+      setToast({
+        message: t("recommendation.geolocationUnsupported"),
+        type: "info",
+      });
       setFetchingLocation(false);
     }
   };
@@ -93,10 +97,18 @@ export default function CropPlanningSystem() {
   const handleSubmit = async () => {
     setLoading(true);
 
-    // Prepare API request body
+    const lat = parseFloat(formData.latitude);
+    const lon = parseFloat(formData.longitude);
+
+    if (isNaN(lat) || isNaN(lon)) {
+      setToast({ message: "Invalid latitude or longitude.", type: "error" });
+      setLoading(false);
+      return;
+    }
+
     const requestBody = {
-      latitude: parseFloat(formData.latitude),
-      longitude: parseFloat(formData.longitude),
+      latitude: lat,
+      longitude: lon,
       soil_type:
         formData.soilType.charAt(0).toUpperCase() +
         formData.soilType.slice(1) +
@@ -111,60 +123,25 @@ export default function CropPlanningSystem() {
         formData.previousCrop.slice(1),
     };
 
-    // If specific crop selected
     if (selectedOption === "specific" && formData.specificCrop) {
       requestBody.specific_crop = formData.specificCrop;
     }
 
     try {
-      // Simulate API call with a delay
-      setTimeout(() => {
-        // Mock result data
-        // const mockResult = {
-        //   recommendations: "**Executive Summary:** Based on your soil analysis and location data, we recommend cultivating the following crops for optimal yield and sustainability.\n\n**Rice:** Suitable due to your soil composition and previous crop history.\n\n**Soybean:** Good option for nitrogen fixation and market value.\n\n**Maize:** Compatible with your climate zone and potassium levels.",
-        //   weather_summary: {
-        //     min_temp: 22,
-        //     max_temp: 35,
-        //     total_precip: 450,
-        //     avg_wind: 8,
-        //     period: "May - September"
-        //   },
-        //   insights: [
-        //     "✅ Soil fertility is optimal for grain crops",
-        //     "⚠️ Consider additional phosphorus supplements",
-        //     "✅ Climate conditions favorable for selected crops",
-        //     "✅ Crop rotation strategy is appropriate"
-        //   ],
-        //   npk_values: {
-        //     N: formData.nitrogen,
-        //     P: formData.phosphorus,
-        //     K: formData.potassium,
-        //     pH: formData.ph,
-        //     organic_matter: formData.organicMatter
-        //   }
-        // };
+      await new Promise((res) => setTimeout(res, 1500)); // short artificial delay
 
-        axios
-          .post("http://127.0.0.1:5000/cropRotation", requestBody)
-          .then((response) => {
-            // Handle the successful response here
-            console.log("Crop rotation suggestions:", response.data);
-            setResult(response.data);
-            setLoading(false);
-            setStep(3);
-            // You might want to update your component's state with the response data
-          })
-          .catch((error) => {
-            // Handle any errors that occurred during the request
-            console.error("Error fetching crop rotation:", error);
-            alert("Failed to get recommendations. Please try again.");
-            setLoading(false);
-            // You might want to display an error message to the user
-          });
-      }, 3000); // 3 second delay to show the loader
+      const response = await recommendService.getCropSuitability(requestBody);
+      if (response?.data) {
+        setResult(response.data);
+        setToast({ message: t("recommendation.success"), type: "success" });
+        setStep(3);
+      } else {
+        throw new Error("Invalid response from server");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
-      alert("Failed to get recommendations. Please try again.");
+      setToast({ message: t("recommendation.failed"), type: "error" });
+    } finally {
       setLoading(false);
     }
   };
@@ -177,27 +154,27 @@ export default function CropPlanningSystem() {
         !formData.previousCrop ||
         !formData.soilType
       ) {
-        alert("Please fill all required fields before proceeding.");
+        setToast({
+          message: "Please fill all required fields before proceeding.",
+          type: "error",
+        });
         return;
       }
+      setStep(2);
+      return;
     }
 
     if (step === 2) {
       if (selectedOption === "specific" && !formData.specificCrop) {
-        alert("Please select a specific crop.");
+        setToast({ message: "Please select a specific crop.", type: "error" });
         return;
       }
       handleSubmit();
-    } else {
-      setStep((prev) => prev + 1);
     }
   };
 
-  const prevStep = () => {
-    setStep((prev) => prev - 1);
-  };
+  const prevStep = () => setStep((prev) => prev - 1);
 
-  // Render form steps
   const renderStep = () => {
     switch (step) {
       case 1:
@@ -916,10 +893,11 @@ export default function CropPlanningSystem() {
               <Leaf className="w-8 h-8 text-green-600" />
             </div>
 
-            <div className="mb-8">
-              <div className="flex items-center">
-                {[1, 2, 3].map((item) => (
-                  <div key={item} className="flex items-center">
+            {/* Progress bar */}
+            <div className="mb-8 w-full">
+              <div className="flex items-center w-full">
+                {[1, 2, 3].map((item, index) => (
+                  <React.Fragment key={item}>
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
                         step >= item
@@ -929,32 +907,33 @@ export default function CropPlanningSystem() {
                     >
                       {item}
                     </div>
-                    {item < 3 && (
+                    {index < 2 && (
                       <div
-                        className={`h-1 w-16 ${
+                        className={`h-1 flex-1 ${
                           step > item ? "bg-green-600" : "bg-green-100"
                         }`}
                       ></div>
                     )}
-                  </div>
+                  </React.Fragment>
                 ))}
               </div>
-              <div className="flex justify-between mt-2 text-xs text-green-800">
+              <div className="flex justify-between mt-2 text-xs text-green-800 font-medium">
                 <span>Field Details</span>
                 <span>Crop Selection</span>
                 <span>Results</span>
               </div>
             </div>
 
+            {/* Dynamic form rendering */}
             <form>
               {renderStep()}
-
               <div className="mt-8 flex justify-between">
                 {step > 1 && (
                   <button
                     type="button"
                     onClick={prevStep}
-                    className="px-6 py-2 bg-green-100 text-green-800 font-medium rounded-md hover:bg-green-200 transition-colors border border-green-300"
+                    disabled={loading}
+                    className="px-6 py-2 bg-green-100 text-green-800 font-medium rounded-md hover:bg-green-200 border border-green-300 transition-colors"
                   >
                     Back
                   </button>
@@ -964,10 +943,10 @@ export default function CropPlanningSystem() {
                   <button
                     type="button"
                     onClick={nextStep}
-                    className="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors ml-auto"
                     disabled={loading}
+                    className="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors ml-auto"
                   >
-                    {step === 2 && loading ? (
+                    {loading ? (
                       <>
                         <Loader className="inline-block w-4 h-4 mr-2 animate-spin" />
                         Processing...
@@ -987,6 +966,7 @@ export default function CropPlanningSystem() {
                       setStep(1);
                       setResult(null);
                       setSelectedOption("");
+                      setSelectedCrop(null);
                     }}
                     className="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors ml-auto"
                   >
@@ -998,6 +978,14 @@ export default function CropPlanningSystem() {
           </div>
         </div>
       </div>
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }

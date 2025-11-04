@@ -9,8 +9,8 @@ from flask_cors import CORS
 from g4f.client import Client
 import json
 
-WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY', '54BK6EDUSNU2SH54ZPBLUM6XK') 
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyA343t2loqOEq-zKx-jH9vsZ_Uv7jYuLv4') 
+WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY') 
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') 
 
 client = Client()
 
@@ -401,7 +401,7 @@ def index():
     try:
         
         data = request.get_json()
-
+        print("Received data:", data)
         
         latitude = float(data['latitude'])
         longitude = float(data['longitude'])
@@ -614,4 +614,4 @@ def get_crop_recommendation():
     return jsonify(data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port="5001",debug=True)
