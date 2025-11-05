@@ -8,7 +8,7 @@ const LanguageSwitcher = ({ className }) => {
     i18n.changeLanguage(lng);
   };
 
-  const baseClass = 'px-3 py-1 border border-agri-200 rounded-md text-sm bg-white text-agri-700';
+  const baseClass = ' py-1 border border-black rounded-md text-sm bg-white';
 
   return (
     <select

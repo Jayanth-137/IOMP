@@ -13,8 +13,8 @@ import Diagnosis from './pages/Diagnosis';
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = !!localStorage.getItem('token');
   // If user is authenticated render children, otherwise redirect to login
-  // return isAuthenticated ? children : <Navigate to="/login" />;
-  return children;
+  return isAuthenticated ? children : <Navigate to="/login" />;
+  // return children;
 };
 
 function App() {

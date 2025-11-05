@@ -100,7 +100,7 @@ const Login = () => {
             disabled={loading}
             className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? <Loader message="" /> : t('login.submit')}
+            {loading ? <Loader message="Logging you in" /> : t('login.submit')}
           </button>
         </form>
 
