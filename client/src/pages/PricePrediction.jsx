@@ -248,7 +248,7 @@ const PricePrediction = () => {
 
         {loading && <Loader message={t('pricePrediction.loading')} />}
 
-        {result && (
+        {/* {result && (
           <div className="space-y-6">
             <div className="card p-6 text-center">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('pricePrediction.resultTitle')}</h3>
@@ -256,7 +256,54 @@ const PricePrediction = () => {
               <p className="text-sm text-gray-600 mt-2">{t('pricePrediction.resultSubtitle')}</p>
             </div>
           </div>
-        )}
+        )} */}
+{result && (
+  <div className="space-y-6">
+    <div className="card p-8 text-center bg-white shadow-lg rounded-xl border border-gray-100">
+      <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+        {t('pricePrediction.resultTitle')}
+      </h3>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* Min Price */}
+        <div className="p-4 rounded-lg shadow-md border border-gray-100">
+          <p className="text-sm font-bold text-gray-500 uppercase tracking-wide">
+            {t('pricePrediction.fields.minPrice') || 'Minimum Price'}
+          </p>
+          <p className="text-2xl font-bold text-green-600 mt-2">
+            ₹{result.predicted_min_price?.toLocaleString() || 'N/A'}
+          </p>
+        </div>
+
+        {/* Modal Price */}
+        <div className="p-4 rounded-lg shadow-md border border-gray-100 transform transition-transform hover:scale-[1.02]">
+          <p className="text-sm font-bold text-yellow-800 uppercase tracking-wide">
+            {t('pricePrediction.fields.modalPrice') || 'Modal Price'}
+          </p>
+          <p className="text-3xl font-extrabold text-yellow-800 mt-2">
+            ₹{result.predicted_modal_price?.toLocaleString() || 'N/A'}
+          </p>
+        </div>
+
+        {/* Max Price */}
+        <div className="p-4 rounded-lg shadow-md border border-gray-100">
+          <p className="text-sm font-bold text-gray-500 uppercase tracking-wide">
+            {t('pricePrediction.fields.maxPrice') || 'Maximum Price'}
+          </p>
+          <p className="text-2xl font-bold text-red-600 mt-2">
+            ₹{result.predicted_max_price?.toLocaleString() || 'N/A'}
+          </p>
+        </div>
+      </div>
+
+      <p className="text-sm text-gray-500 mt-6">
+        {t('pricePrediction.resultSubtitle')}
+      </p>
+    </div>
+  </div>
+)}
+
+
       </div>
     </div>
   );

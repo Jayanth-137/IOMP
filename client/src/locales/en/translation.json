@@ -119,7 +119,10 @@
       "grade": "Grade",
       "day": "Day",
       "month": "Month",
-      "day_of_week": "Day of Week"
+      "day_of_week": "Day of Week",
+      "minPrice": "Minimum Price",
+      "modalPrice": "Modal Price",
+      "maxPrice": "Maximum Price"
     },
     "hints": {
       "district": "Choose the district (encoded)",
