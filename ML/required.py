@@ -26,8 +26,9 @@ app = Flask(__name__)
 CORS(app)
 
 # Load model and encoders once at startup
-MODEL_PATH = "models/current_model.pkl"
-ENCODER_PATH = "label_encoder.pkl"
+BASE_DIR = os.path.dirname(__file__)
+MODEL_PATH = os.path.join(BASE_DIR, "models", "current_model.pkl")
+ENCODER_PATH = os.path.join(BASE_DIR, "label_encoder.pkl")
 
 # Define features (must match training features)
 FEATURES = [
@@ -40,9 +41,17 @@ FEATURES = [
 
 
 #cnn load model and predict function
-# Load your trained model
-cnn_MODEL_PATH = "best_model.keras"
-cnn_model = tf.keras.models.load_model(cnn_MODEL_PATH)
+# Load your trained model (path resolved relative to this script)
+cnn_MODEL_PATH = os.path.join(BASE_DIR, "best_model.keras")
+cnn_model = None
+if os.path.exists(cnn_MODEL_PATH):
+    try:
+        cnn_model = tf.keras.models.load_model(cnn_MODEL_PATH)
+    except Exception as e:
+        print(f"⚠️ Failed to load CNN model: {e}")
+        cnn_model = None
+else:
+    print(f"⚠️ CNN model not found at {cnn_MODEL_PATH}. Disease predictions will be disabled.")
 
 # Define the class labels
 CLASS_NAMES = {
@@ -60,6 +69,8 @@ CLASS_NAMES = {
 
 # Prediction function
 def predict_disease(img_path):
+    if cnn_model is None:
+        return {"error": "CNN model not loaded"}
     # Load and preprocess image
     img = image.load_img(img_path, target_size=(224, 224))
     img_array = image.img_to_array(img)
@@ -80,16 +91,27 @@ def predict_disease(img_path):
 
 
 
-if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(f"❌ Model not found at {MODEL_PATH}")
-if not os.path.exists(ENCODER_PATH):
-    raise FileNotFoundError(f"❌ Encoder not found at {ENCODER_PATH}")
+model = None
+encoders = {}
+if os.path.exists(MODEL_PATH):
+    try:
+        with open(MODEL_PATH, "rb") as f:
+            model = pickle.load(f)
+    except Exception as e:
+        print(f"⚠️ Failed to load model from {MODEL_PATH}: {e}")
+        model = None
+else:
+    print(f"⚠️ Model file not found at {MODEL_PATH}. Prediction endpoint will be disabled until a model is available.")
 
-with open(MODEL_PATH, "rb") as f:
-    model = pickle.load(f)
-
-with open(ENCODER_PATH, "rb") as f:
-    encoders = pickle.load(f)
+if os.path.exists(ENCODER_PATH):
+    try:
+        with open(ENCODER_PATH, "rb") as f:
+            encoders = pickle.load(f)
+    except Exception as e:
+        print(f"⚠️ Failed to load encoders from {ENCODER_PATH}: {e}")
+        encoders = {}
+else:
+    print(f"⚠️ Encoder file not found at {ENCODER_PATH}. Encoders will be created on retrain/update.")
 
 # -------------------------
 # Helper Functions
@@ -104,9 +126,12 @@ def safe_parse_date(x):
 
 
 def load_or_create_encoders(df):
-    if os.path.exists("label_encoder.pkl"):
-        with open("label_encoder.pkl", "rb") as f:
-            encoders = pickle.load(f)
+    if os.path.exists(ENCODER_PATH):
+        try:
+            with open(ENCODER_PATH, "rb") as f:
+                encoders = pickle.load(f)
+        except Exception:
+            encoders = {}
     else:
         encoders = {}
 
@@ -119,8 +144,11 @@ def load_or_create_encoders(df):
         df[col] = le.fit_transform(df[col]) if not hasattr(le, "classes_") else le.transform(df[col])
         encoders[col] = le
 
-    with open("label_encoder.pkl", "wb") as f:
-        pickle.dump(encoders, f)
+    try:
+        with open(ENCODER_PATH, "wb") as f:
+            pickle.dump(encoders, f)
+    except Exception as e:
+        print(f"⚠️ Failed to save encoders to {ENCODER_PATH}: {e}")
 
     return encoders
 
@@ -193,8 +221,14 @@ def train_multioutput_model(csv_path):
     model = MultiOutputRegressor(gb)
     model.fit(X_train, y_train)
 
-    with open("models/current_model.pkl", "wb") as f:
-        pickle.dump(model, f)
+    models_dir = os.path.join(BASE_DIR, "models")
+    os.makedirs(models_dir, exist_ok=True)
+    model_save_path = os.path.join(models_dir, "current_model.pkl")
+    try:
+        with open(model_save_path, "wb") as f:
+            pickle.dump(model, f)
+    except Exception as e:
+        print(f"⚠️ Failed to save model to {model_save_path}: {e}")
 
     preds = model.predict(X_test)
     mae = mean_absolute_error(y_test, preds)
@@ -302,6 +336,9 @@ def predict():
                 # print("======>>>>")
                 return jsonify({"error": f"Missing input field: {col}"}), 400
 
+        if model is None:
+            return jsonify({"error": "Model not loaded. Please retrain or provide a model."}), 503
+
         # Encode categorical values using saved label encoders
 
         # try:
@@ -335,11 +372,28 @@ def predict():
             "modal_price_lag_3": data.get("modal_price_lag_3", 0)
         }
 
+        # Encode categorical fields using available encoders; fallback to fitting a new encoder on the single value
+        for col in ["district", "market", "variety", "grade"]:
+            val = input_row[col]
+            le = encoders.get(col)
+            try:
+                if le is None:
+                    le = LabelEncoder()
+                    le.fit([val])
+                    encoders[col] = le
+                input_row[col] = int(le.transform([val])[0])
+            except Exception:
+                # Fallback to 0 if encoding fails
+                input_row[col] = 0
+
         # Convert to DataFrame
         X_input = pd.DataFrame([input_row])[FEATURES]
 
         # Predict
-        preds = model.predict(X_input)[0]
+        try:
+            preds = model.predict(X_input)[0]
+        except Exception as e:
+            return jsonify({"error": f"Prediction failed: {e}"}), 500
         response = {
             "predicted_min_price": round(preds[0], 2),
             "predicted_max_price": round(preds[1], 2),
@@ -374,6 +428,10 @@ def predict_paddy_disease():
 
     # Predict
     result = predict_disease(img_path)
+
+    if isinstance(result, dict) and result.get("error"):
+        os.remove(img_path)
+        return jsonify(result), 503
 
     # Clean up
     os.remove(img_path)

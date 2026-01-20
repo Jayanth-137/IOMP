@@ -10,7 +10,7 @@ from g4f.client import Client
 import json
 
 WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY') 
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') 
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 
 client = Client()
 
@@ -361,7 +361,7 @@ Important:
     
     try:
         # Initialize the Gemini model
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         # Generate content
         response = model.generate_content(prompt)
