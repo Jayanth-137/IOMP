@@ -8,6 +8,7 @@ const CROP_RECOMMENDATION_API_URL =
 exports.cropSuitability = async (req, res, next) => {
   try {
     const body = req.body;
+    console.log("Crop recommendation API URL:", CROP_RECOMMENDATION_API_URL);
     console.log("Crop recommendation request payload:", body);
     // Call the ML recommendation service. Await the promise and return its data.
     const axiosRes = await axios.post(
@@ -15,7 +16,7 @@ exports.cropSuitability = async (req, res, next) => {
       body,
       {
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
 
     console.log("Crop recommendation response:", axiosRes.data);
