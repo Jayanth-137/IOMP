@@ -20,7 +20,7 @@ def load_env_file(path):
 
 def main():
     # 1) Try environment variable first
-    key = "AIzaSyDEniXIXIybWT9zY9pIjF5-IbSBjDqy_Ng"
+    key = "GEMINI_API_KEY"
 
     # 2) If not present, try ML/.env relative to repo
     if not key:
