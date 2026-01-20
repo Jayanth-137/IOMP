@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # 1. MongoDB Database
+  mongodb:
+    image: mongo:latest
+    container_name: iomp-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  # 2. Node.js Backend
+  server:
+    build: ./server
+    container_name: iomp-server
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongodb:27017/iomp
+      - ML_SERVICE_URL=http://ml-service:9550
+      - CROP_RECOMMENDATION_API_URL=http://ml-service:5001
+    depends_on:
+      - mongodb
+      - ml-service
+
+  # 3. Python ML Services
+  ml-service:
+    build: ./ML
+    container_name: iomp-ml
+    ports:
+      - "9550:9550"
+      - "5001:5001"
+    environment:
+      # IMPORTANT: Your peer needs these keys to run cropRotation.py
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      # Persist the models/data so retraining isn't lost
+      - ./ML/models:/app/models
+      - ./ML/data:/app/data
+
+  # 4. React Frontend
+  client:
+    build: ./client
+    container_name: iomp-client
+    ports:
+      - "5173:80" # Access app at localhost:5173
+    depends_on:
+      - server
+
+volumes:
+  mongo-data:
