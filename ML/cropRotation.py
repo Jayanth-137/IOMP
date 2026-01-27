@@ -23,7 +23,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 app = Flask(__name__)
 CORS(app, resources={r"/cropRotation": {"origins": "*"}, r"/sample": {"origins": "*"}})
 
-def get_agricultural_weather_forecast(latitude, longitude, days=3):
+def get_agricultural_weather_forecast(latitude, longitude, days=30):
     """
     Get agricultural weather forecast for a specific location
 
