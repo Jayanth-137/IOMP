@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 # Point Vite to the backend (localhost in browser context)
-ENV VITE_API_BASE_URL=http://localhost:5000/api/v1
+ENV VITE_API_BASE_URL=http://localhost:5000
 RUN npm run build
 
 # Stage 2: Serve with Nginx
