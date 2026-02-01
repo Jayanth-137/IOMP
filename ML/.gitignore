@@ -3,3 +3,6 @@ temp/
 venv/
 node_modules/
 /table_extractor/table_extractor/__pycache__
+/.env
+.env.local
+.env.*.local
